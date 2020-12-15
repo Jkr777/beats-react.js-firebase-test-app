@@ -1,5 +1,8 @@
 import React, { Component } from "react";
-import { Switch, Route, BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import ToastsComponent from "./utils/toasts";
+import { connect } from 'react-redux';
+import { autoSignIn, logOut } from "./store/actions";
 
 import Header from "./components/header";
 import Footer from "./components/footer";
@@ -8,19 +11,34 @@ import Login from "./components/login";
 import Contact from "./components/contact";
 
 class Routes extends Component {
-  render() {
-    return (
-      <BrowserRouter>
-        <Header />
+
+  componentDidMount() {
+    this.props.dispatch(autoSignIn());
+  }
+
+  handleLogOut = () => this.props.dispatch(logOut());
+
+  app = auth => (
+    <BrowserRouter>
+        <Header auth={auth} logOut={this.handleLogOut}/>
           <Switch>
-            <Route to="/" component={Home} exact />
-            <Route to="/login" component={Login} exact />
-            <Route to="/contact" component={Contact} exact />
+            <Route path="/" exact component={Home} />
+            <Route path="/login" exact component={Login} />
+            <Route path="/contact" exact component={Contact} />
           </Switch>
         <Footer />
+        <ToastsComponent />
       </BrowserRouter>
-    )
+  );
+
+  render() {
+    const { auth } = this.props;
+    return auth.checkingAuth ? this.app(auth) : '...loading';// ast e prop default false
   }
 }
 
-export default Routes;
+const mapStateToProps = state => ({
+  auth: state.auth
+})
+
+export default connect(mapStateToProps)(Routes);
