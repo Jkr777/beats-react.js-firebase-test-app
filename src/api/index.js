@@ -39,7 +39,7 @@ export const autoSignIn = () => (
           resolve({ isAuth: true, user: snapshot.data() });
         });
       } else {
-        resolve({ isAuth: true, user: null  });
+        resolve({ isAuth: false, user: null  });
       }
     });
   })
