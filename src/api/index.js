@@ -46,3 +46,21 @@ export const autoSignIn = () => (
 );
 
 export const logOut = () => firebase.auth().signOut();
+
+export const updateProfile = (formData, isEmailChanged) => {
+  const collection = usersCollection.doc(formData.uid);
+  const updateDocument = () => 
+    collection.update(formData).then(() => (
+      collection.get().then(snapshot => (
+        { isAuth: true, user: snapshot.data() }
+      ))
+    ))
+
+  if(isEmailChanged) {
+    let getUser = firebase.auth().currentUser;
+    getUser.updateEmail(formData.email);
+    return updateDocument();
+  } else {
+    return updateDocument();
+  }
+}

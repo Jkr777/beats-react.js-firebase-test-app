@@ -30,7 +30,7 @@ class Routes extends Component {
             <Route path="/login" exact component={Login} />
             <Route path="/contact" exact component={Contact} />
             <Route path="/dashboard" exact component={AuthHoc(Dashboard)} />
-            <Route path="/dashboard/profile" exact component={AuthHoc(Profile, true)} />
+            <Route path="/dashboard/profile" exact component={AuthHoc(Profile)} />
             <Route path="/dashboard/reviews" exact component={AuthHoc(Reviews)} />
           </Switch>
         <Footer />

@@ -3,7 +3,6 @@ import { registerUser, loginUser } from "../../store/actions";
 import { toast } from 'react-toastify';
 import Prevent from "../hoc/prevent";
 
-
 class Login extends Component {
   state = {
     formData: {
@@ -39,7 +38,6 @@ class Login extends Component {
         this.handleRedirection(payload);
       });
     } else {
-      console.log('yoooooooooo')
       this.props.dispatch(loginUser(this.state.formData)).then(({ payload }) => {
         this.handleRedirection(payload);
       });

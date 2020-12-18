@@ -11,7 +11,7 @@ const auth = function(state=INITIAL_STATE, action) {
     case AUTH_USER: 
       return { ...action.payload, checkingAuth:true };
     case LOGOUT_USER:
-      return { ...state, user: null, isAuth: false }
+      return { ...state, user: null, isAuth: false };
     default:
       return state;
   }
