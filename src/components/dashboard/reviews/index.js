@@ -1,7 +1,9 @@
-function Reviews() {
+import ReviewAddEdit from "./add_edit";
+
+function Reviews(props) {
   return (
     <div>
-      Reviews!!!!!
+      Reviews
     </div>
   )
 }

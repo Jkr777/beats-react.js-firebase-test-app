@@ -13,6 +13,7 @@ import Contact from "./components/contact";
 import Dashboard from "./components/dashboard";
 import Profile from "./components/dashboard/profile";
 import Reviews from "./components/dashboard/reviews";
+import ReviewAddEdit from "./components/dashboard/reviews/add_edit";
 
 class Routes extends Component {
 
@@ -31,7 +32,8 @@ class Routes extends Component {
             <Route path="/contact" exact component={Contact} />
             <Route path="/dashboard" exact component={AuthHoc(Dashboard)} />
             <Route path="/dashboard/profile" exact component={AuthHoc(Profile)} />
-            <Route path="/dashboard/reviews" exact component={AuthHoc(Reviews)} />
+            <Route path="/dashboard/reviews" exact component={AuthHoc(Reviews, true)} />
+            <Route path="/dashboard/reviews/add" exact component={AuthHoc(ReviewAddEdit, true)} />
           </Switch>
         <Footer />
         <ToastsComponent />

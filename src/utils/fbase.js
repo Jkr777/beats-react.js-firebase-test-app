@@ -16,5 +16,6 @@ const fBaseApp = firebase.initializeApp(firebaseConfig);
 
 //db
 export const DB = fBaseApp.firestore();
-export const { Timestamp } = firebase.firestore;
+export const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp;
 export const usersCollection = DB.collection('users');
+export const reviewsCollection = DB.collection('reviews');

@@ -6,7 +6,6 @@ function Dashboard(props) {
       auth={props.auth}
       title="Dashboard"
     >
-      ha nice content
     </Dash_layout>
   )
 }
