@@ -1,13 +1,24 @@
-import { addReview } from "../../api";
-import { ADD_REVIEW } from "../types";
+import {
+  ADD_REVIEW,
+  CLEAR_REVIEW,
+  GET_REVIEWS,
+  GET_REVIEW_BY_ID,
+  FETCH_POSTS
+} from '../types';
 
-const reviewsReducer = (state={}, action) => {
-  switch (action.type) {
-    case ADD_REVIEW:
-      return { ...state, addedReview: action.payload }
-    default:
-      return state;
+export default function (state={},action){
+  switch(action.type){
+      case ADD_REVIEW:
+          return {...state, addedReview: action.payload }
+      case CLEAR_REVIEW:
+          return { addedReview: action.payload ,reviewById: action.payload }
+      case GET_REVIEWS:
+          return { ...state, adminReviews: action.payload}
+      case GET_REVIEW_BY_ID:
+          return {...state, reviewById: action.payload }
+      case FETCH_POSTS:
+          return {...state, posts: action.payload }
+      default:
+          return state;
   }
-};
-
-export default reviewsReducer;
+}

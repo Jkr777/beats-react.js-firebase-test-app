@@ -1,10 +1,11 @@
 import { Component } from "react";
 import { connect } from 'react-redux';
-import { addReview } from "../../../store/actions";
+import { addReview, clearReview, getReviewById, editReview } from "../../../store/actions";
 import { Form, Button, Col } from 'react-bootstrap';
 import { Formik } from "formik";
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
+import Uploader from "./uploader";
 
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -19,13 +20,49 @@ class ReviewForm extends Component {
     },
     disable: false,
     editor: "",
-    editorError: false
+    editorError: false,
+    img: 'https://via.placeholder.com/400',
+    imgName: '',
+    imgError:  ''
   };
+
+  componentDidMount(){
+    const id = this.props.id; // daca avem id insemana ca aceasta comp e fol pt editare, daca nu, pt adaugare!
+
+    if(id) { // daca review'ul cu acest id exista, vfacem req pt toate prop pt ca vem sa se vada in edit form. 
+        this.props.dispatch(getReviewById(id)).then(()=>{
+            const reviewById = this.props.reviews.reviewById;
+            this.setState({
+                mode:'edit',
+                editor: reviewById.content,
+                img: reviewById.downloadUrl,
+                imgName: reviewById.img,
+                initialValues:{
+                    title: reviewById.title,
+                    excerpt: reviewById.excerpt,
+                    rating: reviewById.rating,
+                    public:  reviewById.public
+                }
+            });
+        }).catch((e)=>{ // in cazul unui id care nu exista
+            this.props.history.push('/dashboard/reviews');
+            toast.error('Sorry, the post does not exists',{
+                position:toast.POSITION.BOTTOM_RIGHT
+            })
+        })
+    }
+  }
+
+  componentWillUnmount(){
+    this.props.dispatch(clearReview());
+  } // dupa ce ies stergem datele din form review
 
   handleResetForm = resetForm => {
     resetForm({}); // resetm form, ast e metoda din packet
     this.setState({
       editor: "",
+      img: 'https://via.placeholder.com/400',
+      imgError: false,
       disable: false
     }); // resetam si textul complicat
     toast.success("Congrats you post has beed uploaded!", {
@@ -33,11 +70,25 @@ class ReviewForm extends Component {
     });
   }
 
+  handleImageName = (name, download) => {
+    this.setState({ img: download, imgName: name}); // adauga url si numele dupa ce uploadam img 
+  }
+
   handleSubmit = (values, resetForm) => {
-    let formData = { ...values, content: this.state.editor };
-    this.props.dispatch(addReview(formData, this.props.auth.user)).then(() => {
-      this.handleResetForm(resetForm);
-    });
+    let formData = { ...values, content: this.state.editor, img: this.state.imgName };
+    if (this.state.mode === 'add') { // verifica daca e forl de add sau edit
+      this.props.dispatch(addReview(formData, this.props.auth.user)).then(() => {
+        this.handleResetForm(resetForm);
+      });
+    } else {
+      this.props.dispatch(editReview(formData, this.props.id)).then(() => {
+        this.setState({ disable: false });
+        toast.success('Congrats you post has been updated', {
+          position: toast.POSITION.BOTTOM_RIGHT
+        });
+      })
+    }
+
   }
 
   render() {
@@ -55,6 +106,8 @@ class ReviewForm extends Component {
         onSubmit={(values, {resetForm}) => {
           if(Object.entries(state.editor).length === 0) {
             return this.setState({ editorError: true });
+          } else if(state.imgName === "") { // verificam daca timite form fara img
+            return this.setState({ imgError: true, editorError: false });
           } else { 
             this.setState({ disable: true, editorError: false });
             this.handleSubmit(values, resetForm);
@@ -159,8 +212,11 @@ class ReviewForm extends Component {
                 </Button>
               </Col>
               <Col>
-                UPLOADER
-        <div className="error">Add an image please</div>
+                <Uploader
+                  handleImageName={this.handleImageName}
+                  img={state.img}
+                /> 
+                { state.imgError ?  <div className="error">Add an image please</div> : null }
               </Col>
             </Form.Row>
           </Form>

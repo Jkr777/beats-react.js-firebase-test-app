@@ -19,3 +19,4 @@ export const DB = fBaseApp.firestore();
 export const serverTimestamp = firebase.firestore.FieldValue.serverTimestamp;
 export const usersCollection = DB.collection('users');
 export const reviewsCollection = DB.collection('reviews');
+export const messagesCollection = DB.collection('messages');

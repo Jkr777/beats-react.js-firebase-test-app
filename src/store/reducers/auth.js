@@ -1,4 +1,4 @@
-import { AUTH_USER, LOGOUT_USER } from "../types";
+import { AUTH_USER, LOGOUT_USER, SEND_CONTACT } from "../types";
 
 const INITIAL_STATE = {
   isAuth: false,
@@ -12,6 +12,8 @@ const auth = function(state=INITIAL_STATE, action) {
       return { ...action.payload, checkingAuth:true };
     case LOGOUT_USER:
       return { ...state, user: null, isAuth: false };
+    case SEND_CONTACT:
+      return {...state,contact: action.payload };
     default:
       return state;
   }
