@@ -1,4 +1,4 @@
-I created this demo app when I was learing firebase
+just a demo app, I tried to see how I can use firebase
 
 # Getting Started with Create React App
 
