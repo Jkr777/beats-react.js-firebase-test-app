@@ -1,4 +1,4 @@
-just a demo app, I tried to see how I can use firebase
+just a demo app, using firebase and react.js
 
 # Getting Started with Create React App
 
