@@ -1,4 +1,4 @@
-just a demo app, using firebase and react.js
+A serverless app using react.js and firebase.
 
 # Getting Started with Create React App
 
